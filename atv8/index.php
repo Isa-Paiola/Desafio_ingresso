@@ -7,49 +7,60 @@
     <title>Desafio final</title>
 </head>
 <body>
-    <div id="fundo">
+    <div class="fundo">
 
         <form method="POST">
             <h1>Compre seu ingresso!</h1>
             <p>Nome:</p>
-            <input type="text" name="nome" require>
+            <input type="text" name="nome" required>
             <br>
             <p>Idade:</p>
-            <input type="number" name="number"  require>
+            <input type="number" name="idade" required>
             <br>
             <p>Tipo de ingresso:</p>
-            <select name="ingresso" >
-                <option value="R$100,00">VIP</option>
-                <option value="R$50,00">Regular</option>
-                <option value="R$20,00">Básico</option>
+            <select name="ingresso">
+                <option value="VIP">VIP</option>
+                <option value="Regular">Regular</option>
+                <option value="Básico">Básico</option>
             </select>
             <br>
             <br>
             <button type="submit">Enviar</button>
 
             <?php
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $nome = $_POST['nome'];
+                    $ingresso = $_POST['ingresso'];
+                    $idade = $_POST['idade']; // Corrigido de 'number' para 'idade'
 
-                if ($_SERVER['REQUEST_METHOD']== 'POST'){
-                $nome = $_POST['nome'];
-                $ingresso = $_POST['ingresso'];
+                    echo "<p>Bem-vindo(a), $nome!</p>";
 
-                echo "<p>Bem vindo(a), $nome!</p>";
+                    if ($idade < 18) {
+                        echo "<p>Ingresso não permitido para menores de idade.</p>";
+                    } else {
+                        switch ($ingresso) {
+                            case 'Regular': // Corrigido para 'Regular'
+                                $valor = 50;
+                                break;
+
+                            case 'Básico': // Corrigido para 'Básico'
+                                $valor = 20;
+                                break;
+
+                            case 'VIP':
+                                $valor = 100;
+                                break;
+
+                            default:
+                                echo "<p>Tipo de ingresso inválido.</p>";
+                                exit;
+                        }
+
+                        echo "<p>O valor do seu ingresso $ingresso é R$ " . number_format($valor, 2, ',', '.') . "</p>";
+                    }
                 }
-
-                if (isset($_POST['number'])){
-                    $idade = $_POST['number'];
-    
-                if($idade <18){
-                echo "<p>O valor do seu ingresso VIP é $ingresso </p>";
-                } else{
-                echo "<p> Ingresso não permitido para menores de idade </p>";
-                 }
-        
-                 }    
             ?>
         </form>
     </div>
-    
-    
 </body>
 </html>
